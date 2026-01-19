@@ -1,3 +1,20 @@
+## [0.2.0+ggufv3] - 2026-01-19
+
+### Added
+- GGUF v3 format support via llama.cpp submodule update to commit 504dc37be
+- Comprehensive GGUF v3 documentation (GGUF_V3_SUPPORT.md)
+- Fork-specific version identifier
+
+### Changed
+- Updated llama.cpp submodule from latest master to commit 504dc37be (January 21, 2024)
+- Updated README with fork notice and GGUF v3 information
+- Updated pubspec.yaml with fork metadata
+
+### Notes
+- This fork maintains GGUF v2 and v3 compatibility
+- GGUF v4 models are not supported in this version
+- Based on original llama_cpp_dart by netdur
+
 ## 0.2.3
 *  **Performance**: Moved image embedding storage to native memory (C heap) to reduce Dart GC pressure and improve stability with high-resolution images.
 *  Fix memory leaks in session cancellation and disposal logic.
