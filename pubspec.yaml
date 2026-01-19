@@ -1,5 +1,5 @@
 name: llama_cpp_dart
-description: Dart binding for llama.cpp with GGUF v3 format support (Fork)
+description: "Dart binding for llama.cpp with GGUF v3 format support (Fork)"
 version: 0.2.0+ggufv3
 repository: https://github.com/Krzysztofmal/llama_cpp_dart
 issue_tracker: https://github.com/Krzysztofmal/llama_cpp_dart/issues
