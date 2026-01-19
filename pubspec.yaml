@@ -1,6 +1,6 @@
 name: llama_cpp_dart
-description: "Dart binding for llama.cpp with GGUF v3 format support (Fork)"
-version: 0.2.0+ggufv3
+description: Dart binding for llama.cpp with latest features and universal GGUF support (Fork)
+version: 0.2.1
 repository: https://github.com/Krzysztofmal/llama_cpp_dart
 issue_tracker: https://github.com/Krzysztofmal/llama_cpp_dart/issues
 
@@ -40,7 +40,7 @@ ffigen: # dart run ffigen
       - 'src/llama.cpp/include/llama.h'
       - 'src/llama.cpp/tools/mtmd/mtmd.h'
   compiler-opts:
-    - '-I/usr/lib/clang/17/include'
+    - '-I/usr/lib/clang/18/include'
     - '-Isrc/llama.cpp/ggml/include'
     - '-Isrc/llama.cpp/include'
     - '-Isrc/llama.cpp/tools/mtmd'
