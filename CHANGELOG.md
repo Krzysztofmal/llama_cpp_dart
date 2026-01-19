@@ -1,3 +1,26 @@
+## [0.2.1] - 2026-01-19
+
+### Changed
+- **BREAKING**: Updated llama.cpp submodule to latest master branch
+- Regenerated FFI bindings to match current llama.cpp API
+- Updated all documentation to reflect universal GGUF format support (v2/v3/v4)
+
+### Fixed
+- Fixed segmentation fault caused by ABI mismatch between old submodule and bindings
+- Fixed "symbol not found" errors for `ggml_backend_load_all` and other functions
+- Fixed struct layout mismatches in native parameters
+
+### Added
+- Support for all current GGUF format versions through llama.cpp backward compatibility
+- Latest llama.cpp features and optimizations
+- Improved error messages and troubleshooting documentation
+
+### Notes
+- Users MUST recompile native libraries after updating
+- Old compiled libraries will NOT work with the new version
+- All GGUF model formats (v2, v3, v4) are now supported automatically
+- Based on original llama_cpp_dart by netdur
+
 ## [0.2.0+ggufv3] - 2026-01-19
 
 ### Added

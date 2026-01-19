@@ -1,66 +1,75 @@
-# GGUF v3 Support
+# GGUF Format Support
 
-This fork of `llama_cpp_dart` provides support for GGUF v3 format models.
+This fork of `llama_cpp_dart` uses the **latest version** of llama.cpp from the master branch.
 
 ## Overview
 
-The main change is updating the llama.cpp submodule to a version that supports GGUF v3 format (commit `504dc37be` from January 21, 2024).
+By tracking the latest llama.cpp master branch, this fork provides comprehensive support for all GGUF format versions through automatic backward compatibility.
 
-## What is GGUF v3?
+## What is GGUF?
 
-GGUF (GPT-Generated Unified Format) v3 is an intermediate version of the model format used by llama.cpp:
-- Introduced improved metadata handling
-- Enhanced tensor type support
-- Backward compatible with GGUF v2
-- Superseded by GGUF v4 in late January 2024
+GGUF (GPT-Generated Unified Format) is the model format used by llama.cpp:
+- **GGUF v2**: Original stable format (2023)
+- **GGUF v3**: Intermediate version with improved metadata (early 2024)
+- **GGUF v4**: Current format with enhanced features (2024+)
 
 ## Changes in This Fork
 
 ### 1. Submodule Update
-The `src/llama.cpp` submodule has been updated to commit `504dc37be` which provides GGUF v3 support.
+The `src/llama.cpp` submodule tracks the **latest master branch** of llama.cpp, ensuring:
+- All GGUF format versions are supported
+- Latest performance optimizations
+- Most recent bug fixes
+- New features as they're released
 
 ### 2. Compatibility Matrix
 
 | GGUF Version | Status |
 |--------------|--------|
-| v2 | ✅ Supported (backward compatible) |
-| v3 | ✅ Fully supported |
-| v4 | ⚠️ Not supported in this version |
+| v2 | ✅ Fully supported (backward compatible) |
+| v3 | ✅ Fully supported (backward compatible) |
+| v4 | ✅ Fully supported (current standard) |
+
+The library **automatically detects** the GGUF version and loads models accordingly.
 
 ## Building Native Libraries
 
 After cloning this fork, you'll need to rebuild the native libraries for your platform.
 
-### macOS (ARM64)
+### macOS (ARM64 - Apple Silicon)
 ```bash
 cd src/llama.cpp
-cmake -B build -DBUILD_SHARED_LIBS=ON -DLLAMA_METAL=ON
-cmake --build build --config Release
+cmake -B build -DBUILD_SHARED_LIBS=ON -DLLAMA_METAL=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release -j 8
 cp build/libllama.dylib ../../bin/MAC_ARM64/
+cd ../..
 ```
 
-### macOS (x64)
+### macOS (Intel x64)
 ```bash
 cd src/llama.cpp
-cmake -B build -DBUILD_SHARED_LIBS=ON -DLLAMA_METAL=ON
-cmake --build build --config Release
+cmake -B build -DBUILD_SHARED_LIBS=ON -DLLAMA_METAL=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release -j 8
 cp build/libllama.dylib ../../bin/MAC_X64/
+cd ../..
 ```
 
 ### Linux (x64)
 ```bash
 cd src/llama.cpp
-cmake -B build -DBUILD_SHARED_LIBS=ON
-cmake --build build --config Release
+cmake -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release -j 8
 cp build/libllama.so ../../bin/LINUX_X64/
+cd ../..
 ```
 
 ### Windows (x64)
-```bash
-cd src/llama.cpp
-cmake -B build -DBUILD_SHARED_LIBS=ON
+```powershell
+cd src\llama.cpp
+cmake -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 copy build\Release\llama.dll ..\..\bin\WINDOWS_X64\
+cd ..\..
 ```
 
 ### Android
@@ -79,14 +88,15 @@ xcodebuild -project llama_cpp_dart.xcodeproj -scheme llama_cpp_dart -configurati
 
 ```dart
 import 'package:llama_cpp_dart/llama_cpp_dart.dart';
+import 'dart:io';
 
 void main() async {
   // Set library path for your platform
   Llama.libraryPath = "bin/MAC_ARM64/libllama.dylib";
   
-  // Load GGUF v3 model
+  // Load any GGUF model (v2, v3, or v4 - auto-detected)
   final llama = Llama(
-    "path/to/model-v3.gguf",
+    "path/to/model.gguf",
     modelParams: ModelParams()..nGpuLayers = 99,
     contextParams: ContextParams()..nCtx = 2048,
     samplerParams: SamplerParams()..temp = 0.7,
@@ -102,25 +112,53 @@ void main() async {
 }
 ```
 
-## Testing GGUF v3 Models
+## Testing with Any GGUF Model
 
-To verify GGUF v3 support:
+This fork works with models from any source:
+- ✅ Hugging Face model hub
+- ✅ Models quantized with latest llama.cpp tools
+- ✅ Legacy models in older GGUF formats
+- ✅ Custom fine-tuned models
 
-1. Download a GGUF v3 model (models created between late 2023 and January 2024)
-2. Run the example above
-3. The model should load without errors
+The library automatically handles format detection and compatibility.
 
-### Finding GGUF v3 Models
+## Keeping Up to Date
 
-GGUF v3 models were primarily distributed during a brief period in early 2024. You can:
-- Check Hugging Face for models uploaded around that time
-- Convert older models using llama.cpp tools from the same period
-- Use the `update_submodules.sh` script to ensure proper submodule initialization
+To update to the latest llama.cpp version:
+
+```bash
+cd src/llama.cpp
+git checkout master
+git pull origin master
+cd ../..
+
+# Rebuild the library
+cd src/llama.cpp
+rm -rf build
+cmake -B build -DBUILD_SHARED_LIBS=ON -DLLAMA_METAL=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release -j 8
+cp build/libllama.dylib ../../bin/MAC_ARM64/  # Adjust for your platform
+cd ../..
+```
+
+Or use the provided script:
+```bash
+./update_submodules.sh
+```
 
 ## Troubleshooting
 
-### "Unsupported GGUF version" Error
-This means your model is in GGUF v4 format. This fork specifically supports v3. Use the original repository for v4 support.
+### Segmentation Fault
+If you encounter segmentation faults:
+1. Ensure you've recompiled the native library after updating the submodule
+2. Verify the library path is correct
+3. Check that you're using the correct library for your platform
+
+### Library Not Found
+Ensure you've built the native libraries for your platform and set the correct path:
+```dart
+Llama.libraryPath = "bin/YOUR_PLATFORM/libllama.{dylib|so|dll}";
+```
 
 ### Compilation Errors
 Make sure you've properly initialized and updated submodules:
@@ -128,29 +166,33 @@ Make sure you've properly initialized and updated submodules:
 git submodule update --init --recursive
 ```
 
-### Library Not Found
-Ensure you've built the native libraries for your platform and set the correct path in `Llama.libraryPath`.
+### Model Loading Errors
+If a model fails to load:
+- Check the model file isn't corrupted
+- Ensure you have enough RAM/VRAM
+- Try reducing `nGpuLayers` or `nCtx`
 
-## Updating Submodules
+## Benefits of Latest Version
 
-Use the provided script to update submodules:
-```bash
-./update_submodules.sh
-```
-
-Note: This script will update to the latest commit on the configured branch. For GGUF v3 support, the submodule is pinned to commit `504dc37be`.
+Using the latest llama.cpp master provides:
+- 🚀 **Better Performance**: Latest optimizations for Metal, CUDA, and CPU
+- 🐛 **Bug Fixes**: All known issues resolved
+- 📦 **New Features**: Latest capabilities as they're added
+- 🔒 **Security**: Latest security patches
+- 📱 **Broader Device Support**: Optimizations for more hardware
 
 ## Original Repository
 
 This is a fork of [netdur/llama_cpp_dart](https://github.com/netdur/llama_cpp_dart).
 
-For the latest features and GGUF v4+ support, see the original repository.
+The main difference is that this fork explicitly tracks the latest llama.cpp master for maximum compatibility and features.
 
 ## Contributing
 
-If you find issues with GGUF v3 support in this fork, please open an issue with:
+If you find issues, please open an issue with:
 - Your platform (OS and architecture)
-- The GGUF v3 model you're testing
+- The GGUF model you're testing
+- llama.cpp commit hash (from `git log -1` in `src/llama.cpp`)
 - Full error logs
 
 ## License

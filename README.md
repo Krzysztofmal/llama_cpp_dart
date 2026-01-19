@@ -1,8 +1,12 @@
 # LLAMA.CPP DART
 
-> **📌 Note**: This is a fork that adds GGUF v3 format support. See [GGUF_V3_SUPPORT.md](GGUF_V3_SUPPORT.md) for details on changes and usage.
+> **📌 Note**: This fork uses the **latest llama.cpp master branch** for maximum compatibility and features.
 > 
-> For GGUF v4+ support and the latest features, see the [original repository](https://github.com/netdur/llama_cpp_dart).
+> - ✅ Supports all GGUF formats (v2, v3, v4) through automatic detection
+> - ✅ Latest performance optimizations
+> - ✅ Most recent bug fixes and features
+> 
+> See [GGUF_V3_SUPPORT.md](GGUF_V3_SUPPORT.md) for details. Original repository: [netdur/llama_cpp_dart](https://github.com/netdur/llama_cpp_dart)
 
 A high-performance Dart binding for llama.cpp, enabling advanced text generation capabilities in both Dart and Flutter applications with flexible integration options.
 
